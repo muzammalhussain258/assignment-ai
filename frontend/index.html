@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AI Assignment Generator</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="/frontend/css/style.css" />
+</head>
+<body>
+
+  <!-- Header -->
+  <header class="site-header">
+    <div class="header-bg"></div>
+    <div class="header-content">
+      <h1 class="site-title">AI Assignment Generator</h1>
+      <p class="site-subtitle">Generate professional assignments powered by AI</p>
+    </div>
+  </header>
+
+  <!-- Main Content -->
+  <main class="main-content">
+
+    <!-- Form Card -->
+    <section id="form-section" class="card form-card">
+      <form id="assignment-form" novalidate>
+
+        <!-- Topic -->
+        <div class="form-group">
+          <label for="topic" class="form-label">Topic <span class="required">*</span></label>
+          <input
+            type="text"
+            id="topic"
+            name="topic"
+            class="form-input"
+            placeholder="e.g., Impact of AI on healthcare"
+            minlength="3"
+            required
+          />
+          <span class="field-error" id="topic-error"></span>
+        </div>
+
+        <!-- Education Level -->
+        <div class="form-group">
+          <label for="education-level" class="form-label">Education Level</label>
+          <div class="select-wrapper">
+            <select id="education-level" name="education_level" class="form-select">
+              <option value="school">School</option>
+              <option value="college" selected>College</option>
+              <option value="university">University</option>
+            </select>
+            <span class="select-arrow">▾</span>
+          </div>
+        </div>
+
+        <!-- Word Count -->
+        <div class="form-group">
+          <label class="form-label">
+            Word Count: <span id="word-count-display" class="accent-value">1500</span>
+          </label>
+          <input
+            type="range"
+            id="word-count"
+            name="word_count"
+            class="range-slider"
+            min="200"
+            max="10000"
+            value="1500"
+            step="50"
+          />
+          <div class="range-labels">
+            <span>200</span>
+            <span>10,000</span>
+          </div>
+        </div>
+
+        <!-- Template -->
+        <div class="form-group">
+          <label class="form-label">Template</label>
+          <div class="card-grid" id="template-grid" role="radiogroup" aria-label="Select template">
+            <button type="button" class="option-card" data-value="standard" aria-pressed="true">
+              <span class="option-icon">📄</span>
+              <span class="option-label">Standard</span>
+            </button>
+            <button type="button" class="option-card" data-value="research_paper" aria-pressed="false">
+              <span class="option-icon">🔬</span>
+              <span class="option-label">Research Paper</span>
+            </button>
+            <button type="button" class="option-card" data-value="essay" aria-pressed="false">
+              <span class="option-icon">✍️</span>
+              <span class="option-label">Essay</span>
+            </button>
+            <button type="button" class="option-card" data-value="case_study" aria-pressed="false">
+              <span class="option-icon">📊</span>
+              <span class="option-label">Case Study</span>
+            </button>
+            <button type="button" class="option-card" data-value="lab_report" aria-pressed="false">
+              <span class="option-icon">🧪</span>
+              <span class="option-label">Lab Report</span>
+            </button>
+          </div>
+          <input type="hidden" id="selected-template" value="standard" />
+        </div>
+
+        <!-- LLM Provider -->
+        <div class="form-group">
+          <label class="form-label">LLM Provider</label>
+          <div class="card-grid card-grid--providers" id="provider-grid" role="radiogroup" aria-label="Select LLM provider">
+            <button type="button" class="option-card" data-value="openai" aria-pressed="false">
+              <span class="option-icon">🟢</span>
+              <span class="option-label">OpenAI</span>
+              <span class="option-sub">GPT-4o Mini</span>
+            </button>
+            <button type="button" class="option-card" data-value="gemini" aria-pressed="true">
+              <span class="option-icon">🔵</span>
+              <span class="option-label">Google Gemini</span>
+              <span class="option-sub">Free</span>
+            </button>
+            <button type="button" class="option-card" data-value="anthropic" aria-pressed="false">
+              <span class="option-icon">🟣</span>
+              <span class="option-label">Anthropic Claude</span>
+              <span class="option-sub">&nbsp;</span>
+            </button>
+            <button type="button" class="option-card recommended" data-value="groq" aria-pressed="false">
+              <span class="option-icon">⚡</span>
+              <span class="option-label">Groq</span>
+              <span class="option-sub">Fastest, Free</span>
+              <span class="badge">RECOMMENDED</span>
+            </button>
+          </div>
+          <input type="hidden" id="selected-provider" value="gemini" />
+        </div>
+
+        <!-- API Key -->
+        <div class="form-group">
+          <label for="api-key" class="form-label">API Key <span class="required">*</span></label>
+          <div class="password-wrapper">
+            <input
+              type="password"
+              id="api-key"
+              name="api_key"
+              class="form-input"
+              placeholder="Enter your API key"
+              required
+              autocomplete="off"
+            />
+            <button type="button" class="toggle-password" id="toggle-api-key" aria-label="Show/hide API key">
+              <span id="eye-icon">👁️</span>
+            </button>
+          </div>
+          <span class="field-error" id="api-key-error"></span>
+          <p class="helper-text">
+            Get your API key at:
+            <a href="#" id="api-key-link" class="helper-link" target="_blank" rel="noopener noreferrer">
+              <span id="api-key-link-text">https://aistudio.google.com/apikey</span>
+            </a>
+          </p>
+        </div>
+
+        <!-- Submit -->
+        <button type="submit" id="generate-btn" class="btn btn--primary btn--full">
+          <span id="btn-text">🚀 Generate Assignment</span>
+          <span id="btn-spinner" class="spinner hidden" aria-hidden="true"></span>
+        </button>
+
+      </form>
+    </section>
+
+    <!-- Loading Section -->
+    <section id="loading-section" class="card loading-card hidden" aria-live="polite" aria-label="Generating assignment">
+      <div class="loading-header">
+        <h2 class="loading-title">Generating Your Assignment…</h2>
+        <p class="loading-hint">This usually takes 30–60 seconds</p>
+      </div>
+      <div class="progress-bar-wrap">
+        <div id="progress-bar" class="progress-bar" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
+      </div>
+      <p id="loading-status" class="loading-status">🔍 Analyzing topic…</p>
+    </section>
+
+    <!-- Results Section -->
+    <section id="results-section" class="card results-card hidden" aria-live="polite">
+      <div class="results-icon">✅</div>
+      <h2 class="results-title">Assignment Generated Successfully!</h2>
+      <p id="assignment-id-display" class="assignment-id"></p>
+      <div class="download-buttons">
+        <button type="button" id="download-docx" class="btn btn--docx">
+          📥 Download DOCX
+        </button>
+        <button type="button" id="download-pdf" class="btn btn--pdf">
+          📥 Download PDF
+        </button>
+      </div>
+      <button type="button" id="generate-another" class="btn btn--secondary">
+        🔄 Generate Another
+      </button>
+    </section>
+
+    <!-- Error Section -->
+    <section id="error-section" class="card error-card hidden" aria-live="assertive">
+      <div class="error-header">
+        <span class="error-icon">⚠️</span>
+        <button type="button" id="dismiss-error" class="dismiss-btn" aria-label="Dismiss error">✕</button>
+      </div>
+      <p id="error-message" class="error-message">Something went wrong. Please try again.</p>
+      <button type="button" id="try-again" class="btn btn--secondary">Try Again</button>
+    </section>
+
+  </main>
+
+  <!-- Footer -->
+  <footer class="site-footer">
+    <p>Powered by <strong>LangChain + LangGraph</strong></p>
+    <p>Built with ❤️ by AI &nbsp;·&nbsp; v1.0.0</p>
+  </footer>
+
+  <script src="/frontend/js/app.js"></script>
+</body>
+</html>
