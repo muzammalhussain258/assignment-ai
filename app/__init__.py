@@ -2,17 +2,21 @@
 
 from __future__ import annotations
 
+import os
 import time
 import uuid
 
 import structlog
-from flask import Flask, g, request
+from flask import Flask, g, request, send_from_directory
 from flask_cors import CORS
 
 from app.config import Config, get_config
 from app.errors.handlers import register_error_handlers
 from app.utils.file_storage import ensure_directories
 from app.utils.logger import initialize_logging
+
+# Absolute path to the frontend/ directory at the repository root
+_FRONTEND_DIR = os.path.join(os.path.dirname(os.path.dirname(__file__)), "frontend")
 
 
 def create_app(config: Config | None = None) -> Flask:
@@ -42,6 +46,15 @@ def create_app(config: Config | None = None) -> Flask:
     from app.api.v1.routes import api_v1
 
     app.register_blueprint(api_v1)
+
+    # Step 5b: Serve frontend static files and index at root
+    @app.get("/")
+    def frontend_index():
+        return send_from_directory(_FRONTEND_DIR, "index.html")
+
+    @app.get("/frontend/<path:filename>")
+    def frontend_static(filename: str):
+        return send_from_directory(_FRONTEND_DIR, filename)
 
     # Step 6: Register error handlers
     register_error_handlers(app)
